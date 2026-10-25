@@ -22,7 +22,8 @@ time.sleep(5)
 
 # 2. Base de dados de exemplo atualizada com todos os campos solicitados
 # Na sua aplicação real, você pode carregar de uma planilha usando: df = pd.read_excel('sua_planilha.xlsx')
-df_alunos = pd.read_csv('notas.csv', sep=';', dtype={'RA': str})
+# Recomendado usar o notas_organizadas.csv gerado pelo organizador.py:
+df_alunos = pd.read_csv('notas_organizadas.csv', sep=';', dtype={'RA': str})
 
 
 def preencher_formulario(ra, nome, nota1, nota2, tf1, tf2):
@@ -68,21 +69,22 @@ def preencher_formulario(ra, nome, nota1, nota2, tf1, tf2):
   pyautogui.click(x=713, y=347)
   time.sleep(1.5)
 
+# Executando a automação para cada linha da planilha
+for _, aluno in df_alunos.iterrows():
+  ra = str(aluno["RA"])
+  nome = str(aluno["Nome"])
+  nota1 = str(aluno["Nota01"])
+  nota2 = str(aluno["Nota02"])
+  tf1 = str(aluno["TF01"])
+  tf2 = str(aluno["TF02"])
 
-# Executando a automação para cada registro da lista
-for aluno in dados_alunos:
   print(
-      f"Processando RA: {aluno['ra']} - {aluno['nome']} | Notas:"
-      f" {aluno['nota1']}, {aluno['nota2']} | TFs: {aluno['tf1']}, {aluno['tf2']}"
+      f"Processando RA: {ra} - {nome} | Notas: {nota1}, {nota2} | TFs: {tf1},"
+      f" {tf2}"
   )
-  preencher_formulario(
-      aluno["ra"],
-      aluno["nome"],
-      aluno["nota1"],
-      aluno["nota2"],
-      aluno["tf1"],
-      aluno["tf2"],
-  )
+  preencher_formulario(ra, nome, nota1, nota2, tf1, tf2)
+
+  
 
 print(
     "Processo concluído com sucesso! Todas as informações foram enviadas e"
